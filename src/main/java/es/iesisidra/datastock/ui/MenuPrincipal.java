@@ -1,9 +1,8 @@
 package es.iesisidra.datastock.ui;
-
+import es.iesisidra.datastock.ficheros.ExploradorFicheros;
 import es.iesisidra.datastock.servicio.Inventario;
 import es.iesisidra.datastock.util.ColoresConsola;
 import es.iesisidra.datastock.util.LectorConsola;
-
 /**
  * Presentación de menús y navegación de la primera fase de DataStock.
  * <p>Los métodos marcados TODO son puntos de partida, NO soluciones de los
@@ -30,7 +29,7 @@ public class MenuPrincipal {
             System.out.println("0. Salir");
             opcion = LectorConsola.leerOpcion("Selecciona una opción: ", 0, 6);
             switch (opcion) {
-                case 1 -> pendiente("RF-FIC-01 · Explorar ficheros y directorios");
+                case 1 -> explorarFicheros();
                 case 2 -> pendiente("RF-FIC-02 · Importar productos desde JSON");
                 case 3 -> pendiente("RF-FIC-03 · Importar productos desde XML");
                 case 4 -> menuConsultas();
@@ -41,6 +40,19 @@ public class MenuPrincipal {
             }
         } while (opcion != 0);
     }
+
+    
+private void explorarFicheros() {
+
+    System.out.println("\n===== EXPLORAR RUTA =====");
+
+    String ruta = LectorConsola.leerTexto("Ruta: ");
+
+    ExploradorFicheros.explorar(ruta);
+
+    LectorConsola.pausar();
+}
+
 
     private void mostrarCabecera() {
         System.out.println(ColoresConsola.pintar("\n================================================", ColoresConsola.CIAN));
