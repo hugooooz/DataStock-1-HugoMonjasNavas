@@ -43,7 +43,7 @@ public class ExploradorFicheros {
                 }
 
                 if (elementos.length == 0) {
-                    System.out.println("La carpeta está vacía.");
+                    System.out.println("La carpeta esta vacia.");
                 }
 
                 int ficheros = 0;

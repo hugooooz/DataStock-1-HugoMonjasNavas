@@ -41,8 +41,8 @@ public class MenuPrincipal {
         } while (opcion != 0);
     }
 
-    
-private void explorarFicheros() {
+    //Explorador de ficheros
+    private void explorarFicheros() {
 
     System.out.println("\n===== EXPLORAR RUTA =====");
 
@@ -51,7 +51,7 @@ private void explorarFicheros() {
     ExploradorFicheros.explorar(ruta);
 
     LectorConsola.pausar();
-}
+    }
 
 
     private void mostrarCabecera() {

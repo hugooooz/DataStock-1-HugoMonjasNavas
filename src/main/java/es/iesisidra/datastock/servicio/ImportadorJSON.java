@@ -46,6 +46,20 @@ public class ImportadorJSON {
 
         System.out.println("Productos encontrados: " + productos.size());
 
+
+        for (int i = 0; i < productos.size(); i++) {
+
+        JsonObject producto = productos.get(i).getAsJsonObject();
+
+        String codigo = producto.get("codigo").getAsString();
+        String nombre = producto.get("nombre").getAsString();
+
+        System.out.println("Código: " + codigo);
+        System.out.println("Nombre: " + nombre);
+        System.out.println("----------------------");
+        }
+
+
         } catch (IOException | JsonParseException | IllegalStateException e) {
             System.out.println("Error al leer el JSON: " + e.getMessage());
         }
