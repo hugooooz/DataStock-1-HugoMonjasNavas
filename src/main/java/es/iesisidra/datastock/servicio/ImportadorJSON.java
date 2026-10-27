@@ -2,6 +2,7 @@ package es.iesisidra.datastock.servicio;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -54,9 +55,19 @@ public class ImportadorJSON {
         String codigo = producto.get("codigo").getAsString();
         String nombre = producto.get("nombre").getAsString();
 
+        BigDecimal precio = producto.get("precio").getAsBigDecimal();
+        int stock = producto.get("stock").getAsInt();
+        int categoriaId = producto.get("categoriaId").getAsInt();
+        int proveedorId = producto.get("proveedorId").getAsInt();
+
+
         System.out.println("Código: " + codigo);
         System.out.println("Nombre: " + nombre);
         System.out.println("----------------------");
+        System.out.println("Precio: " + precio);
+        System.out.println("Stock: " + stock);
+        System.out.println("Categoría: " + categoriaId);
+        System.out.println("Proveedor: " + proveedorId);
         }
 
 
