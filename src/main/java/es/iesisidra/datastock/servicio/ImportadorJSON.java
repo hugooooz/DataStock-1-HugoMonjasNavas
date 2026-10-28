@@ -65,7 +65,6 @@ public class ImportadorJSON {
 
 
 
-
             JsonArray productos = lista.getAsJsonArray();
             int importados = 0;
             int rechazados = 0;
@@ -169,7 +168,7 @@ public class ImportadorJSON {
 
         JsonElement dato = producto.get(campo);
         if (dato == null || !dato.isJsonPrimitive()) {
-            
+
             throw new IllegalArgumentException("Falta o es incorrecto el campo: " + campo);
         }
 
