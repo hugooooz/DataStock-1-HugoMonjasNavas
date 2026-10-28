@@ -15,11 +15,11 @@ public class ExploradorFicheros {
 
             File archivo = new File(ruta.trim());
 
+            
             if (!archivo.exists()) {
                 System.out.println("La ruta no existe.");
                 return;
             }
-
             if (!archivo.canRead()) {
                 System.out.println("No tienes permiso para leer esta ruta.");
                 return;
@@ -32,6 +32,7 @@ public class ExploradorFicheros {
                 System.out.println("Tamaño: " + archivo.length() + " bytes");
                 return;
             }
+
 
             if (archivo.isDirectory()) {
 
@@ -52,23 +53,30 @@ public class ExploradorFicheros {
                 for (File elemento : elementos) {
 
                     if (elemento.isFile()) {
-                        System.out.println("[FICHERO] " + elemento.getName()
-                                + " - " + elemento.length() + " bytes");
+                        System.out.println("[FICHERO] " + elemento.getName() + " - " + elemento.length() + " bytes");
                         ficheros++;
 
                     } else if (elemento.isDirectory()) {
                         System.out.println("[DIR] " + elemento.getName());
                         carpetas++;
                     }
+
+
+
                 }
 
-                System.out.println("Total ficheros: " + ficheros
-                        + " | Directorios: " + carpetas);
+                System.out.println("Total ficheros: " + ficheros + " | Directorios: " + carpetas);
             }
 
+
+
         } catch (SecurityException e) {
-            System.out.println("Error: no tienes permiso para acceder a esta ruta.");
+            System.out.println("Error!!! no tienes permiso para acceder a esta ruta.");
         }
 
     }
+
+
+
+
 }
