@@ -65,6 +65,98 @@ public class ExportadorProductos {
         }
 
         return true;
+    }
+
+    public static void exportarJSON(Inventario inventario, String ruta) {
+
+        if (!comprobar(inventario, ruta)) {
+            return;
+        }
+
+        
+        ArrayList<Producto> productos = new ArrayList<>(inventario.getProductos());
+        productos.sort(Comparator.comparing(Producto::getCodigo));
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonObject json = new JsonObject();
+        json.add("productos", gson.toJsonTree(productos));
+        try (FileWriter escritor = new FileWriter(ruta.trim(), StandardCharsets.UTF_8)) {
+
+
+
+            gson.toJson(json, escritor);
+
+            System.out.println("Fichero JSON generado correctamente.");
+            System.out.println("Ruta: " + new File(ruta.trim()).getAbsolutePath());
+            System.out.println("Productos exportados: " + productos.size());
+
+        } catch (IOException e) {
+            System.out.println("Error al exportar JSON: " + e.getMessage());
+        }
+    }
+
+
+    public static void exportarXML(Inventario inventario, String ruta) {
+
+        if (!comprobar(inventario, ruta)) {
+            return;
+        }
+
+        
+        ArrayList<Producto> productos = new ArrayList<>(inventario.getProductos());
+        productos.sort(Comparator.comparing(Producto::getCodigo));
+
+        try {
+
+            DocumentBuilderFactory fabrica = DocumentBuilderFactory.newInstance();
+            fabrica.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            DocumentBuilder lector = fabrica.newDocumentBuilder();
+            Document documento = lector.newDocument();
+            Element catalogo = documento.createElement("catalogo");
+            documento.appendChild(catalogo);
+            
+
+            for (Producto producto : productos) {
+
+                Element elemento = documento.createElement("producto");
+                catalogo.appendChild(elemento);
+
+
+
+                agregarCampo(documento, elemento, "codigo", producto.getCodigo());
+                agregarCampo(documento, elemento, "nombre", producto.getNombre());
+                agregarCampo(documento, elemento, "precio", producto.getPrecio().toString());
+                agregarCampo(documento, elemento, "stock", String.valueOf(producto.getStock()));
+                agregarCampo(documento, elemento, "categoriaId", String.valueOf(producto.getCategoriaId()));
+                agregarCampo(documento, elemento, "proveedorId", String.valueOf(producto.getProveedorId()));
+            }
+
+            TransformerFactory fabricaEscritura = TransformerFactory.newInstance();
+            fabricaEscritura.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            fabricaEscritura.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            fabricaEscritura.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+
+            Transformer escritor = fabricaEscritura.newTransformer();
+
+            escritor.setOutputProperty(OutputKeys.INDENT, "yes");
+            escritor.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+
+            File archivo = new File(ruta.trim());
+
+            escritor.transform(
+                    new DOMSource(documento),
+                    new StreamResult(archivo)
+            );
+
+            System.out.println("Fichero XML generado correctamente.");
+            System.out.println("Ruta: " + archivo.getAbsolutePath());
+            System.out.println("Productos exportados: " + productos.size());
+
+        } catch (ParserConfigurationException | TransformerException e) {
+            System.out.println("Error al exportar XML: " + e.getMessage());
+        }
+
+
+    }
 
 
 
