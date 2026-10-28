@@ -1,5 +1,6 @@
 package es.iesisidra.datastock.ui;
 import es.iesisidra.datastock.ficheros.ExploradorFicheros;
+import es.iesisidra.datastock.servicio.ImportadorJSON;
 import es.iesisidra.datastock.servicio.Inventario;
 import es.iesisidra.datastock.util.ColoresConsola;
 import es.iesisidra.datastock.util.LectorConsola;
@@ -30,7 +31,7 @@ public class MenuPrincipal {
             opcion = LectorConsola.leerOpcion("Selecciona una opción: ", 0, 6);
             switch (opcion) {
                 case 1 -> explorarFicheros();
-                case 2 -> pendiente("RF-FIC-02 · Importar productos desde JSON");
+                case 2 -> importarJSON();
                 case 3 -> pendiente("RF-FIC-03 · Importar productos desde XML");
                 case 4 -> menuConsultas();
                 case 5 -> menuExportaciones();
@@ -41,7 +42,7 @@ public class MenuPrincipal {
         } while (opcion != 0);
     }
 
-    //Explorador de ficheros
+    //Explorador de ficheros rf01
     private void explorarFicheros() {
 
     System.out.println("\n===== EXPLORAR RUTA =====");
@@ -52,6 +53,20 @@ public class MenuPrincipal {
 
     LectorConsola.pausar();
     }
+
+    //importarjson rf02
+
+    private void importarJSON() {
+
+        System.out.println("\n===== IMPORTAR JSON =====");
+
+        String ruta = LectorConsola.leerTexto("Ruta del fichero JSON: ");
+
+        ImportadorJSON.importar(ruta, inventario);
+
+        LectorConsola.pausar();
+    }
+
 
 
     private void mostrarCabecera() {
