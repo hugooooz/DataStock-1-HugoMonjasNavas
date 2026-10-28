@@ -1,11 +1,15 @@
 package es.iesisidra.datastock.ui;
+import java.io.File;
+
 import es.iesisidra.datastock.ficheros.ExploradorFicheros;
 import es.iesisidra.datastock.servicio.ConsultarProductos;
+import es.iesisidra.datastock.servicio.ExportadorProductos;
 import es.iesisidra.datastock.servicio.ImportadorJSON;
 import es.iesisidra.datastock.servicio.ImportadorXML;
 import es.iesisidra.datastock.servicio.Inventario;
 import es.iesisidra.datastock.util.ColoresConsola;
 import es.iesisidra.datastock.util.LectorConsola;
+
 /**
  * Presentación de menús y navegación de la primera fase de DataStock.
  * <p>Los métodos marcados TODO son puntos de partida, NO soluciones de los
@@ -95,6 +99,54 @@ public class MenuPrincipal {
     }
 
 
+    //Este es el rf05
+
+        
+    private void exportarProductos(boolean esJSON) {
+
+
+
+        System.out.println("\n===== EXPORTAR PRODUCTOS =====");
+
+        if (inventario.getProductos().isEmpty()) {
+            System.out.println("El inventario esta vacio.");
+            return;
+        }
+
+        String ruta = LectorConsola.leerTexto("Ruta de destino: ");
+
+        if (ruta.trim().isEmpty()) {
+            System.out.println("No has introducido ninguna ruta.");
+            return;
+        }
+
+        File archivo = new File(ruta.trim());
+
+        if (archivo.exists()) {
+
+            if (archivo.isDirectory()) {
+                System.out.println("La ruta corresponde a una carpeta.");
+                return;
+                
+            }
+
+            boolean confirmar = LectorConsola.confirmar("El fichero ya existe. Sobrescribir");
+
+            if (!confirmar) {
+                System.out.println("Exportacion cancelada.");
+
+                return;
+            }
+        }
+
+        if (esJSON) {
+            ExportadorProductos.exportarJSON(inventario, ruta);
+
+        } else {
+            ExportadorProductos.exportarXML(inventario, ruta);
+        }
+    }
+
 
     private void mostrarCabecera() {
         System.out.println(ColoresConsola.pintar("\n================================================", ColoresConsola.CIAN));
@@ -132,8 +184,8 @@ public class MenuPrincipal {
             System.out.println("0. Volver al menú principal");
             opcion = LectorConsola.leerOpcion("Selecciona una opción: ", 0, 2);
             switch (opcion) {
-                case 1 -> pendiente("RF-FIC-05 · Exportar JSON");
-                case 2 -> pendiente("RF-FIC-05 · Exportar XML");
+                case 1 -> exportarProductos(true);
+                case 2 -> exportarProductos(false);
                 case 0 -> { }
                 default -> throw new IllegalStateException("Opción inesperada");
             }
