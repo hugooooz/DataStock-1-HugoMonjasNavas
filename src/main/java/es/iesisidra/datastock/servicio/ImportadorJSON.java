@@ -1,83 +1,188 @@
 package es.iesisidra.datastock.servicio;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
+import es.iesisidra.datastock.modelo.Producto;
+
 public class ImportadorJSON {
+
     public static void importar(String ruta, Inventario inventario) {
 
-        File archivo = new File(ruta);
-
-        if (!archivo.exists()) {
-            System.out.println("El fichero no existe");
+        // Comprobamos la ruta
+        if (ruta.trim().isEmpty()) {
+            System.out.println("No has introducido ninguna ruta.");
             return;
-            
         }
 
-        if(!archivo.isFile()){
-            System.out.println("La ruta no es un fichero");
+        File archivo = new File(ruta.trim());
+
+        if (!archivo.exists()) {
+            System.out.println("El fichero no existe.");
+            return;
+        }
+
+        if (!archivo.isFile()) {
+            System.out.println("La ruta no es un fichero.");
             return;
         }
 
         if (!archivo.canRead()) {
-            System.out.println("No se puede leer el fichero");
+            System.out.println("No se puede leer el fichero.");
             return;
         }
 
-
-        
+        // Abrimos y leemos el JSON
         try (FileReader lector = new FileReader(archivo)) {
 
-            JsonObject json = JsonParser.parseReader(lector).getAsJsonObject();
+            JsonElement contenido = JsonParser.parseReader(lector);
 
-            JsonArray productos = json.getAsJsonArray("productos");
-
-            if (productos == null) {
-                System.out.println("El JSON no contiene la lista de productos.");
+            // Comprobamos que la estructura sea correcta
+            if (!contenido.isJsonObject()) {
+                System.out.println("El JSON no tiene una estructura correcta.");
                 return;
+            }
 
-            //El cartero mira la lista ysi resulta que la lista de productos esta invisible o no existe (null), dice: "¡Me estafaron, este pergamino no trae la lista!" y se va.
-        }
+            JsonObject json = contenido.getAsJsonObject();
 
-        System.out.println("Productos encontrados: " + productos.size());
+            JsonElement lista = json.get("productos");
 
+            if (lista == null || !lista.isJsonArray()) {
+                System.out.println("El JSON no contiene una lista de productos válida.");
+                return;
+            }
 
-        for (int i = 0; i < productos.size(); i++) {
+            JsonArray productos = lista.getAsJsonArray();
 
-        JsonObject producto = productos.get(i).getAsJsonObject();
+            int importados = 0;
+            int rechazados = 0;
 
-        String codigo = producto.get("codigo").getAsString();
-        String nombre = producto.get("nombre").getAsString();
+            System.out.println("Productos encontrados: " + productos.size());
 
-        BigDecimal precio = producto.get("precio").getAsBigDecimal();
-        int stock = producto.get("stock").getAsInt();
-        int categoriaId = producto.get("categoriaId").getAsInt();
-        int proveedorId = producto.get("proveedorId").getAsInt();
+            // Recorremos todos los productos
+            for (int i = 0; i < productos.size(); i++) {
 
+                try {
 
-        System.out.println("Código: " + codigo);
-        System.out.println("Nombre: " + nombre);
-        System.out.println("----------------------");
-        System.out.println("Precio: " + precio);
-        System.out.println("Stock: " + stock);
-        System.out.println("Categoría: " + categoriaId);
-        System.out.println("Proveedor: " + proveedorId);
-        }
+                    if (!productos.get(i).isJsonObject()) {
+                        throw new IllegalArgumentException("No es un producto válido.");
+                    }
 
+                    JsonObject producto = productos.get(i).getAsJsonObject();
+
+                    // Leemos los seis campos
+                    String codigo = leerCampo(producto, "codigo").trim().toUpperCase();
+                    String nombre = leerCampo(producto, "nombre").trim();
+
+                    BigDecimal precio = new BigDecimal(leerCampo(producto, "precio"));
+
+                    int stock = new BigDecimal(leerCampo(producto, "stock")).intValueExact();
+
+                    int categoriaId = new BigDecimal(leerCampo(producto, "categoriaId")).intValueExact();
+
+                    int proveedorId = new BigDecimal(leerCampo(producto, "proveedorId")).intValueExact();
+
+                    // Validamos el código
+                    if (codigo.isEmpty() || codigo.length() > 12
+                            || !codigo.matches("[A-Z0-9-]+")) {
+                        throw new IllegalArgumentException("Código incorrecto.");
+                    }
+
+                    // Validamos el nombre
+                    if (nombre.length() < 3 || nombre.length() > 100) {
+                        throw new IllegalArgumentException("Nombre incorrecto.");
+                    }
+
+                    // Validamos el precio
+                    if (precio.compareTo(BigDecimal.ZERO) <= 0) {
+                        throw new IllegalArgumentException("El precio debe ser mayor que 0.");
+                    }
+
+                    // Validamos el stock
+                    if (stock < 0) {
+                        throw new IllegalArgumentException("El stock no puede ser negativo.");
+                    }
+
+                    // Validamos categoría y proveedor
+                    if (categoriaId <= 0 || proveedorId <= 0) {
+                        throw new IllegalArgumentException("Categoría o proveedor incorrecto.");
+                    }
+
+                    // Comprobamos los códigos duplicados
+                    boolean duplicado = false;
+
+                    for (Producto existente : inventario.getProductos()) {
+
+                        if (existente.getCodigo().equalsIgnoreCase(codigo)) {
+                            duplicado = true;
+                        }
+                    }
+
+                    if (duplicado) {
+                        throw new IllegalArgumentException("Código duplicado: " + codigo);
+                    }
+
+                    // Creamos el producto
+                    Producto nuevo = new Producto(
+                            codigo,
+                            nombre,
+                            precio,
+                            stock,
+                            categoriaId,
+                            proveedorId
+                    );
+
+                    // Lo añadimos al inventario
+                    inventario.getProductos().add(nuevo);
+
+                    importados++;
+
+                } catch (RuntimeException e) {
+
+                    rechazados++;
+
+                    System.out.println("Producto " + (i + 1)
+                            + " rechazado: " + e.getMessage());
+                }
+            }
+
+            // Mostramos el resumen
+            System.out.println("--------------------------");
+            System.out.println("Productos encontrados: " + productos.size());
+            System.out.println("Productos importados: " + importados);
+            System.out.println("Productos rechazados: " + rechazados);
+            System.out.println("Importación finalizada.");
 
         } catch (IOException | JsonParseException | IllegalStateException e) {
+
             System.out.println("Error al leer el JSON: " + e.getMessage());
+
+        } catch (SecurityException e) {
+
+            System.out.println("No tienes permiso para acceder al fichero.");
+        }
+    }
+
+    // Método para leer un campo del producto
+    private static String leerCampo(JsonObject producto, String campo) {
+
+        JsonElement dato = producto.get(campo);
+
+        if (dato == null || !dato.isJsonPrimitive()) {
+            throw new IllegalArgumentException("Falta o es incorrecto el campo: " + campo);
         }
 
-    }    
+        return dato.getAsString();
+    }
 }
-
 
 /**
  * el cartero agarra una caja archivo y le pega un papelito con la direccion ruta que le di. El cartero viaja a esa dirección para revisar. El signo ! significa NO y el cartero va y ve que ahí no hay nada (la casa no existe), grita en la pantalla que el fichero no existe, pero si no se rinde osea si no usa el return, se pone feliz y avisa de que si esta???? si es asi, seguimos
