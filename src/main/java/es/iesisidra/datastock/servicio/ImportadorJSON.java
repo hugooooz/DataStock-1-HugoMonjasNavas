@@ -14,7 +14,6 @@ import com.google.gson.JsonParser;
 import es.iesisidra.datastock.modelo.Producto;
 
 
-
 public class ImportadorJSON {
 
     public static void importar(String ruta, Inventario inventario) {
