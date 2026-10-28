@@ -18,7 +18,6 @@ public class ConsultarProductos {
         }
 
         List<Producto> productos = new ArrayList<>(inventario.getProductos());
-
         productos.sort(Comparator.comparing(Producto::getCodigo));
         System.out.println("===== LISTA DE PRODUCTOS =====");
 
@@ -68,6 +67,7 @@ public class ConsultarProductos {
         int encontrados = 0;
 
 
+
         for (Producto producto : inventario.getProductos()) {
 
             if (producto.getNombre().toLowerCase().contains(nombre.toLowerCase())) {
@@ -86,5 +86,15 @@ public class ConsultarProductos {
         }
     }
 
-    
+    private static void mostrarProducto(Producto producto) {
+
+        System.out.println("------------------------------------");
+        System.out.println("Codigo: " + producto.getCodigo());
+        System.out.println("Nombre: " + producto.getNombre());
+        System.out.println("Precio: " + producto.getPrecio() + " euros");
+        System.out.println("Stock: " + producto.getStock());
+        System.out.println("Categoria: " + producto.getCategoriaId());
+        System.out.println("Proveedor: " + producto.getProveedorId());
+        System.out.println("----------------------------------------");
+    }
 }

@@ -1,5 +1,6 @@
 package es.iesisidra.datastock.ui;
 import es.iesisidra.datastock.ficheros.ExploradorFicheros;
+import es.iesisidra.datastock.servicio.ConsultarProductos;
 import es.iesisidra.datastock.servicio.ImportadorJSON;
 import es.iesisidra.datastock.servicio.ImportadorXML;
 import es.iesisidra.datastock.servicio.Inventario;
@@ -76,6 +77,23 @@ public class MenuPrincipal {
         LectorConsola.pausar();
     }
 
+    //rf04
+
+
+    private void buscarProductoCodigo() {
+
+        System.out.println("\n===== BUSCAR POR CODIGO =====");
+        String codigo = LectorConsola.leerTexto("Introduce el codigo: ");
+        ConsultarProductos.buscarCodigo(inventario, codigo);
+    }
+
+    private void buscarProductoNombre() {
+
+        System.out.println("\n===== BUSCAR POR NOMBRE =====");
+        String nombre = LectorConsola.leerTexto("Introduce el nombre: ");
+        ConsultarProductos.buscarNombre(inventario, nombre);
+    }
+
 
 
     private void mostrarCabecera() {
@@ -96,9 +114,9 @@ public class MenuPrincipal {
             System.out.println("0. Volver al menú principal");
             opcion = LectorConsola.leerOpcion("Selecciona una opción: ", 0, 3);
             switch (opcion) {
-                case 1 -> pendiente("RF-FIC-04 · Listar productos");
-                case 2 -> pendiente("RF-FIC-04 · Buscar por código");
-                case 3 -> pendiente("RF-FIC-04 · Buscar por nombre");
+                case 1 -> ConsultarProductos.listar(inventario);
+                case 2 -> buscarProductoCodigo();
+                case 3 -> buscarProductoNombre();
                 case 0 -> { }
                 default -> throw new IllegalStateException("Opción inesperada");
             }
