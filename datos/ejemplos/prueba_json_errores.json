@@ -1,0 +1,45 @@
+
+{
+  "productos": [
+    {
+      "codigo": "TEC-100",
+      "nombre": "Teclado gaming de oro",
+      "precio": 35.50,
+      "stock": 10,
+      "categoriaId": 1,
+      "proveedorId": 1
+    },
+    {
+      "codigo": "RAT-100",
+      "nombre": "Raton USB con colorines",
+      "precio": -15.00,
+      "stock": 20,
+      "categoriaId": 1,
+      "proveedorId": 1
+    },
+    {
+      "codigo": "MON-100",
+      "nombre": "Monitor Samsung",
+      "precio": 150.00,
+      "stock": 5,
+      "categoriaId": 2,
+      "proveedorId": 2
+    },
+    {
+      "codigo": "TEC-100",
+      "nombre": "Teclado repetido",
+      "precio": 20.00,
+      "stock": 8,
+      "categoriaId": 1,
+      "proveedorId": 1
+    },
+    {
+      "codigo": "AUR-100",
+      "nombre": "Auriculares bluetooth",
+      "precio": 45.99,
+      "stock": 12,
+      "categoriaId": 1,
+      "proveedorId": 2
+    }
+  ]
+}

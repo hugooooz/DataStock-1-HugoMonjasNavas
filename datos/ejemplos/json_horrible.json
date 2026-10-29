@@ -1,0 +1,16 @@
+//este docuemnto esta mal escrito a proposito
+{
+
+
+  "productos": [
+    {
+      "codigo": "TEC-200",
+      "nombre": "Teclado USB",
+      "precio": 25.50,
+      "stock": 10,
+      "categoriaId": 1,
+      "proveedorId": 1
+
+
+    }
+

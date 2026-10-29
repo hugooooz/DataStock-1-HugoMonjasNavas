@@ -156,7 +156,7 @@ public class ImportadorXML {
             }
 
             System.out.println("-=----------------------------------=-");
-            System.out.println("Prroductos encontrados: " + productos.getLength());
+            System.out.println("Productos encontrados: " + productos.getLength());
             System.out.println("Productos importados: " + importados);
             System.out.println("Prodctos rechazados: " + rechazados);
             System.out.println("Importacion finalizada.");

@@ -1,121 +1,78 @@
-# DataStock – Proyecto inicial (UT1)
+# DataStock - UT1
 
-**Módulo:** Acceso a Datos · 2.º DAM · IES Isidra de Guzmán · Curso 2026–2027  
-**Lenguaje:** Java 21 · **Construcción:** Maven · **Interfaz:** consola
+**Modulo:** Acceso a Datos - 2 DAM  
+**Curso:** 2026-2027  
+**Tecnologia:** Java 21 y Maven  
+**Aplicacion:** Consola
 
-## 1. ¿Qué es este proyecto?
+## Descripcion
 
-DataStock es una práctica **individual e integradora** que evolucionará durante tres unidades:
+DataStock es una aplicacion de consola para trabajar con un inventario de productos informaticos. Permite importar catalogos JSON y XML, consultar productos, exportar datos y guardar o recuperar el inventario. Durante la UT1 los productos se mantienen en memoria y no se utiliza MySQL.
 
-- **UT1 – Ficheros:** importar JSON/XML, consultar en memoria, exportar, serializar y desarrollar dos actividades independientes (XPath y `RandomAccessFile`).
-- **UT2 – JDBC:** incorporar MySQL, operaciones SQL y transacciones.
-- **UT3 – Componentes:** reorganizar el acceso a datos en componentes reutilizables.
+## Requisitos para ejecutar
 
-**Esta entrega inicial solo prepara la UT1.** El código entregado **no resuelve** los requisitos funcionales: los menús muestran mensajes `[PENDIENTE]` hasta que se implementen.
+- JDK 21.
+- Maven.
+- VS Code con Extension Pack for Java, u otro IDE compatible con Maven.
 
-## 2. Requisitos previos
-
-- JDK **21** instalado y seleccionado en el IDE (`java -version`).
-- Maven instalado, o un IDE con integración Maven.
-- Consola con UTF-8 para ver correctamente tildes y símbolos.
-
-## 3. Cómo abrir y ejecutar
-
-1. Descomprime el ZIP y abre **la carpeta que contiene `pom.xml`** como proyecto Maven en IntelliJ IDEA, Eclipse o VS Code.
-2. Espera a que Maven descargue la dependencia Gson (requiere conexión a Internet la primera vez).
-3. Ejecuta `es.iesisidra.datastock.App` desde el IDE, o en una terminal situada en la raíz:
+Abrir en VS Code la carpeta del proyecto que contiene `pom.xml`. En la terminal de esa carpeta ejecutar:
 
 ```bash
 mvn clean compile
 mvn exec:java
 ```
 
-Para ejecutar las actividades complementarias (todavía pendientes de desarrollar):
+Tambien se puede ejecutar la clase `es.iesisidra.datastock.App` desde VS Code.
 
-```bash
-mvn exec:java -Dexec.mainClass=es.iesisidra.datastock.complementarias.XPathActividad
-mvn exec:java -Dexec.mainClass=es.iesisidra.datastock.complementarias.AccesoAleatorioActividad
-```
+## Funciones del menu principal
 
-> Si el IDE muestra caracteres de control ANSI, desactiva el color al ejecutar Java con `-Ddatastock.color=false`, o configura la variable de entorno `NO_COLOR=1`.
+- **1. Explorar ficheros y directorios (RF-FIC-01):** comprueba una ruta, muestra archivos, carpetas, tamanos y totales.
+- **2. Importar JSON (RF-FIC-02):** lee productos con Gson, valida sus datos y rechaza duplicados o registros incorrectos.
+- **3. Importar XML (RF-FIC-03):** lee productos con DOM, aplica validaciones y rechaza XML con DTD.
+- **4. Consultar productos (RF-FIC-04):** lista productos ordenados por codigo y busca por codigo o nombre.
+- **5. Exportar productos (RF-FIC-05):** crea archivos JSON o XML con los productos disponibles.
+- **6. Guardar y recuperar inventario (RF-FIC-06):** utiliza serializacion Java para almacenar y recuperar una copia en un fichero `.dat`.
 
-## 4. Organización del proyecto
+El menu comienza con el inventario vacio. Hay que importar productos antes de consultarlos, exportarlos o guardarlos. Las importaciones JSON y XML anaden productos; recuperar un `.dat` sustituye la lista actual, con confirmacion cuando hay productos cargados.
+
+## Actividades independientes
+
+**RF-FIC-07 - XPath:** clase `es.iesisidra.datastock.complementarias.XPathActividad`. Permite buscar en un XML por codigo, categoria, precio superior y contar productos. Se ejecuta desde VS Code abriendo la clase y pulsando **Run Java** en su `main`.
+
+**RF-FIC-08 - RandomAccessFile:** clase `es.iesisidra.datastock.complementarias.AccesoAleatorioActividad`. Permite generar `stock.bin`, consultar posiciones, modificar el stock y mostrar todos los registros. Cada registro ocupa 36 bytes. Tambien se ejecuta desde su propio `main` en VS Code.
+
+El fichero `stock.bin` es independiente del inventario en memoria: modificar un registro binario no modifica los objetos `Producto`.
+
+## Carpetas principales
 
 ```text
 DataStock_UT1_Proyecto_Inicial/
-├── pom.xml
-├── README.md
-├── .gitignore
-├── datos/
-│   ├── ejemplos/              # JSON/XML para comenzar las pruebas
-│   └── salidas/               # Exportaciones y binarios generados
-├── material_referencia/       # Modelo relacional y script SQL para UT2
-└── src/main/java/es/iesisidra/datastock/
-    ├── App.java               # Punto de entrada
-    ├── modelo/
-    │   ├── Producto.java
-    │   ├── Categoria.java
-    │   ├── Proveedor.java
-    │   └── MovimientoStock.java
-    ├── servicio/
-    │   └── Inventario.java    # Colección compartida en memoria
-    ├── ui/
-    │   └── MenuPrincipal.java # Menú principal y submenús
-    ├── util/
-    │   ├── LectorConsola.java
-    │   └── ColoresConsola.java
-    └── complementarias/
-        ├── XPathActividad.java
-        └── AccesoAleatorioActividad.java
+  pom.xml
+  README.md
+  .gitignore
+  datos/
+    ejemplos/             JSON y XML de entrada y pruebas
+    salidas/              Resultados generados por el programa
+  material_referencia/    Material facilitado para la futura UT2
+  src/main/java/es/iesisidra/datastock/
+    App.java
+    ficheros/             ExploradorFicheros.java
+    modelo/               Producto y otras clases del modelo
+    servicio/             Inventario, importadores, consultas, exportacion y serializacion
+    ui/                   MenuPrincipal.java
+    util/                 Lectura de consola
+    complementarias/      XPathActividad.java y AccesoAleatorioActividad.java
 ```
 
-## 5. Menús que ya aparecen
+## Archivos para realizar pruebas
 
-**Menú principal:**
+Algunos ejemplos de entrada estan en `datos/ejemplos/`, entre ellos `catalogo_valido.json`, `catalogo_valido.xml` y ficheros con errores. Al probar las exportaciones se pueden utilizar rutas como `datos/salidas/inventario.json` y `datos/salidas/inventario.xml`. La carpeta de destino debe existir.
 
-```text
-1. Explorar ficheros y directorios     RF-FIC-01
-2. Importar productos desde JSON       RF-FIC-02
-3. Importar productos desde XML        RF-FIC-03
-4. Consultar productos                 RF-FIC-04
-5. Exportar productos                  RF-FIC-05
-6. Guardar y recuperar inventario      RF-FIC-06
-0. Salir
-```
+Las pruebas de aceptacion de cada requisito se documentan en el registro de pruebas de la UT1 con entrada, resultado esperado, resultado obtenido y estado. Los archivos generados se pueden volver a crear ejecutando las opciones correspondientes.
 
-**4. Consultar productos:** listar, buscar por código, buscar por nombre, volver.  
-**5. Exportar productos:** exportar JSON, exportar XML, volver.  
-**6. Guardar y recuperar inventario:** guardar `.dat`, recuperar `.dat`, volver.
+## Notas
 
-`RF-FIC-07` (XPath) y `RF-FIC-08` (`RandomAccessFile`) se ejecutan en clases independientes.
-
-## 6. ¿Qué está hecho y qué debes programar?
-
-**Se proporciona:** clases del modelo con Javadoc y getters/setters, colección inicial vacía, navegación de menús, lectura básica de consola, colores ANSI opcionales, configuración Maven y datos de ejemplo.
-
-**Debes implementar:** la exploración de rutas, lectura/validación/importación JSON y XML, consultas, exportación, serialización y recuperación, XPath y acceso aleatorio. También debes crear las pruebas y registrar sus resultados.
-
-**Importante:** el menú solo debe **presentar opciones y delegar**. No coloques en el `switch` la lógica de ficheros, JSON, XML, validaciones o serialización. Puedes crear tus propios paquetes y clases, por ejemplo `ficheros`, `validacion`, `servicio`.
-
-La clase `Inventario` contiene la lista compartida; el alumnado debe implementar las reglas de alta, búsqueda y sustitución conforme al enunciado. **No se precargan productos:** se empieza con el inventario vacío.
-
-## 7. Reglas clave del enunciado
-
-- JSON raíz `productos` y XML raíz `catalogo` con elementos `producto`.
-- Los campos del producto son `codigo`, `nombre`, `precio`, `stock`, `categoriaId` y `proveedorId`.
-- Los códigos no se duplican, incluso si cambia el uso de mayúsculas/minúsculas.
-- Un documento mal formado o con estructura general inválida **no modifica** el inventario.
-- Si el documento es válido pero contiene registros incorrectos, se incorporan solo los válidos.
-- Importar JSON/XML **añade** productos; recuperar un `.dat` **sustituye** el inventario, tras confirmar cuando corresponda.
-- En UT1 no hay base de datos: los ID de categoría y proveedor se comprueban como enteros positivos, pero no se buscan en MySQL.
-- El fichero `stock.bin` de RF-FIC-08 es una **copia independiente**: los cambios hechos allí no actualizan la colección Java.
-
-## 8. GitHub, documentación y pruebas
-
-Crea un repositorio individual, realiza commits con mensajes significativos y mantén actualizado este README con las instrucciones reales de tu solución. Entrega el documento de pruebas cumplimentado con los casos de aceptación del enunciado y conserva ejemplos de entradas válidas e inválidas.
-
-Antes de entregar, comprueba que `mvn clean compile` funciona, que el menú no termina ante entradas inválidas y que puedes explicar el código de cada requisito. La práctica y la prueba individual se evaluarán conforme a la programación didáctica.
-
-## 9. Referencia
-
-Consulta el **enunciado DataStock UT1** facilitado en el aula virtual: es la fuente que determina el comportamiento exigido. El SQL y el diagrama del directorio `material_referencia` se facilitan para entender el proyecto completo; **no hay que conectar MySQL en UT1**.
+- Esta entrega corresponde solo a la UT1. No se conecta a MySQL.
+- Gson se gestiona desde el `pom.xml`; XML y XPath utilizan bibliotecas de Java.
+- El codigo separa el menu de las operaciones con ficheros.
+- No se deben subir archivos compilados, credenciales ni datos personales al repositorio.

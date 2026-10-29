@@ -1,0 +1,48 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<catalogo>
+    <producto>
+        <codigo>TEC-500</codigo>
+        <nombre>Teclado Gaming</nombre>
+        <precio>35.50</precio>
+        <stock>10</stock>
+        <categoriaId>1</categoriaId>
+        <proveedorId>1</proveedorId>
+    </producto>
+
+    <producto>
+        <codigo>RAT-500</codigo>
+        <nombre>Raton USB</nombre>
+        <precio>-20.00</precio>
+        <stock>5</stock>
+        <categoriaId>1</categoriaId>
+        <proveedorId>1</proveedorId>
+    </producto>
+
+    <producto>
+        <codigo>MON-500</codigo>
+        <nombre>Monitor Gaming</nombre>
+        <precio>175.00</precio>
+        <stock>8</stock>
+        <categoriaId>2</categoriaId>
+        <proveedorId>2</proveedorId>
+    </producto>
+
+    <producto>
+        <codigo>AUR-500</codigo>
+        <nombre>Au</nombre>
+        <precio>40.00</precio>
+        <stock>15</stock>
+        <categoriaId>1</categoriaId>
+        <proveedorId>1</proveedorId>
+    </producto>
+
+    <producto>
+        <codigo>WEB-500</codigo>
+        <nombre>Webcam HD</nombre>
+        <precio>29.99</precio>
+        <stock>12</stock>
+        <categoriaId>1</categoriaId>
+        <proveedorId>2</proveedorId>
+    </producto>
+</catalogo>

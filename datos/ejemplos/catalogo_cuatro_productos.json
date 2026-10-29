@@ -1,0 +1,8 @@
+{
+  "productos": [
+    {"codigo":"TEC-101","nombre":"Teclado USB","precio":19.95,"stock":12,"categoriaId":1,"proveedorId":1},
+    {"codigo":"RAT-102","nombre":"Raton inalambrico","precio":14.50,"stock":25,"categoriaId":1,"proveedorId":1},
+    {"codigo":"MON-103","nombre":"Monitor 24 pulgadas","precio":149.99,"stock":8,"categoriaId":2,"proveedorId":2},
+    {"codigo":"AUR-104","nombre":"Auriculares USB","precio":29.99,"stock":10,"categoriaId":1,"proveedorId":2}
+  ]
+}

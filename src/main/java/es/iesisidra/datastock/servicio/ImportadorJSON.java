@@ -159,7 +159,7 @@ public class ImportadorJSON {
 
         } catch (SecurityException e) {
 
-            System.out.println("No tienes permiso para acceder al fichreo.");
+            System.out.println("No tienes permiso para acceder al fichero.");
         }
     }
 

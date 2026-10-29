@@ -1,0 +1,12 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE catalogo [
+<!ELEMENT catalogo (producto*)>
+<!ELEMENT producto (codigo)>
+<!ELEMENT codigo (#PCDATA)>
+]>
+<catalogo>
+    <producto>
+        <codigo>TEC-999</codigo>
+    </producto>
+</catalogo>
