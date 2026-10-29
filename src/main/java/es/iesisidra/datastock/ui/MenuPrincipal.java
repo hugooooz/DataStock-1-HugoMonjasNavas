@@ -1,12 +1,15 @@
 package es.iesisidra.datastock.ui;
 import java.io.File;
+import java.util.List;
 
 import es.iesisidra.datastock.ficheros.ExploradorFicheros;
+import es.iesisidra.datastock.modelo.Producto;
 import es.iesisidra.datastock.servicio.ConsultarProductos;
 import es.iesisidra.datastock.servicio.ExportadorProductos;
 import es.iesisidra.datastock.servicio.ImportadorJSON;
 import es.iesisidra.datastock.servicio.ImportadorXML;
 import es.iesisidra.datastock.servicio.Inventario;
+import es.iesisidra.datastock.servicio.SerializadorInventario;
 import es.iesisidra.datastock.util.ColoresConsola;
 import es.iesisidra.datastock.util.LectorConsola;
 
@@ -147,6 +150,77 @@ public class MenuPrincipal {
         }
     }
 
+    //RF06 
+
+        
+    private void guardarInventario() {
+
+        System.out.println("\n===== GUARDAR INVENTARIO =====");
+
+        if (inventario.getProductos().isEmpty()) {
+            System.out.println("El inventario esta vacio.");
+            return;
+        }
+
+        String ruta = LectorConsola.leerTexto("Ruta de destino (.dat): ");
+
+        if (ruta.trim().isEmpty()) {
+            System.out.println("No has introducido ninguna ruta.");
+            return;
+        }
+
+        File archivo = new File(ruta.trim());
+
+        // Pedimos permiso antes de sobrescribir
+        if (archivo.exists() && archivo.isFile()) {
+
+            boolean confirmar = LectorConsola.confirmar("El fichero ya existe. Sobrescribir");
+
+            if (!confirmar) {
+                System.out.println("Guardado cancelado.");
+                return;
+            }
+        }
+
+        SerializadorInventario.guardar(inventario, ruta);
+    }
+
+    private void recuperarInventario() {
+
+        System.out.println("\n===== RECUPERAR INVENTARIO =====");
+
+        String ruta = LectorConsola.leerTexto("Ruta del fichero (.dat): ");
+
+        // Si ya hay productos, pedimos confirmacion
+        if (!inventario.getProductos().isEmpty()) {
+
+            System.out.println("Actualmente hay "
+                    + inventario.getProductos().size() + " productos.");
+
+            boolean confirmar = LectorConsola.confirmar(
+                    "La recuperacion sustituira el inventario actual. Continuar");
+
+            if (!confirmar) {
+                System.out.println("Recuperacion cancelada.");
+                return;
+            }
+        }
+
+        // Recuperamos primero en una lista temporal
+        List<Producto> recuperados = SerializadorInventario.recuperar(ruta);
+
+        if (recuperados != null) {
+
+            // Sustituimos el inventario solo cuando todo esta correcto
+            inventario.getProductos().clear();
+            inventario.getProductos().addAll(recuperados);
+
+            System.out.println("Productos en memoria: "
+                    + inventario.getProductos().size());
+        }
+    }
+
+
 
     private void mostrarCabecera() {
         System.out.println(ColoresConsola.pintar("\n================================================", ColoresConsola.CIAN));
@@ -201,8 +275,8 @@ public class MenuPrincipal {
             System.out.println("0. Volver al menú principal");
             opcion = LectorConsola.leerOpcion("Selecciona una opción: ", 0, 2);
             switch (opcion) {
-                case 1 -> pendiente("RF-FIC-06 · Guardar inventario");
-                case 2 -> pendiente("RF-FIC-06 · Recuperar inventario");
+                case 1 -> guardarInventario();
+                case 2 -> recuperarInventario();
                 case 0 -> { }
                 default -> throw new IllegalStateException("Opción inesperada");
             }
