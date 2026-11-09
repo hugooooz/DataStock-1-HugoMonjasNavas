@@ -1,0 +1,12 @@
+{
+  "productos": [
+    {
+      "codigo": "PRU-701",
+      "nombre": "Producto proveedor inexistente",
+      "precio": 15.50,
+      "stock": 5,
+      "categoriaId": 1,
+      "proveedorId": 9999
+    }
+  ]
+}

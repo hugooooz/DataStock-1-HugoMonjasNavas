@@ -1,0 +1,21 @@
+
+{
+  "productos": [
+    {
+      "codigo": "CP18-01",
+      "nombre": "Producto prueba rollback uno",
+      "precio": 10.50,
+      "stock": 5,
+      "categoriaId": 1,
+      "proveedorId": 1
+    },
+    {
+      "codigo": "CP18-02",
+      "nombre": "Producto prueba rollback dos",
+      "precio": 20.75,
+      "stock": 8,
+      "categoriaId": 1,
+      "proveedorId": 1
+    }
+  ]
+}

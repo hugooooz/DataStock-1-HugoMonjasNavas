@@ -63,7 +63,7 @@ public class ImportadorXML {
             Document documento = lector.parse(archivo);
             Element raiz = documento.getDocumentElement();
 
-
+//revisar
             if (raiz == null || !raiz.getTagName().equals("catalogo")) {
                 System.out.println("El XML no tiene la raiz catalogo.");
                 return;

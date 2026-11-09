@@ -50,7 +50,7 @@ public class ImportadorJSON {
 
             JsonElement contenido = JsonParser.parseReader(lector);
             if (!contenido.isJsonObject()) {
-                System.out.println("El JSON no tiene una estructura correcta.");
+                System.out.println("El JSON no tiene una estructura correcta (esta vacio).");
                 return;
             }
 
@@ -80,7 +80,12 @@ public class ImportadorJSON {
                         throw new IllegalArgumentException("No es un producto valido.");
                     }
 
+                    
                     JsonObject producto = productos.get(i).getAsJsonObject();
+                    
+                    if (producto.size() == 0) {
+                        throw new IllegalArgumentException("El producto esta vacio.");
+                    }
                     String codigo = leerCampo(producto, "codigo").trim().toUpperCase();
                     String nombre = leerCampo(producto, "nombre").trim();
                     BigDecimal precio = new BigDecimal(leerCampo(producto, "precio"));
